@@ -1,0 +1,36 @@
+{
+  "name": "automeme-okx-executor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && cp node_modules/howler/dist/howler.min.js public/howler.min.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test test/**/*.test.ts",
+    "trade": "tsx src/cli.ts",
+    "benchmark:bsc": "npm run build && node dist/src/benchmark-bsc.js",
+    "replay:webhook": "npm run build && node dist/src/replay-webhook-log.js",
+    "webhook": "npm run build && npm run build:frontend && node dist/src/webhook-server.js",
+    "dashboard": "npm run webhook",
+    "demo:resonance": "npm run build && node dist/src/demo-resonance.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.4",
+    "@types/node": "^26.1.2",
+    "better-sqlite3": "^13.0.3",
+    "bs58": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "howler": "^2.2.4",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2",
+    "viem": "^2.55.10"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0"
+  }
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080a09;
+      --surface: rgba(17, 21, 19, 0.92);
+      --line: rgba(216, 255, 222, 0.12);
+      --line-strong: rgba(183, 255, 101, 0.3);
+      --text: #f4f7f2;
+      --muted: #8d9991;
+      --accent: #b8ff63;
+      --danger: #ff7777;
+      --radius: 18px;
+      --mono: "SFMono-Regular", "Roboto Mono", "Cascadia Code", monospace;
+      --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image:
+        radial-gradient(circle at 30% 20%, rgba(184, 255, 99, 0.04) 0%, transparent 60%),
+        radial-gradient(circle at 70% 80%, rgba(101, 230, 203, 0.03) 0%, transparent 60%);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 48px 40px;
+      backdrop-filter: blur(16px);
+    }
+    .login-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .login-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .login-logo-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(184, 255, 99, 0.5);
+    }
+    .login-logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text);
+    }
+    .login-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .login-input {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-family: var(--mono);
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .login-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 255, 99, 0.1);
+    }
+    .login-input::placeholder {
+      color: var(--muted);
+      font-family: var(--sans);
+    }
+    .login-button {
+      width: 100%;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #0a0d0b;
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      letter-spacing: 0.5px;
+    }
+    .login-button:hover { opacity: 0.9; }
+    .login-button:active { transform: scale(0.98); }
+    .login-button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .login-error {
+      text-align: center;
+      font-size: 13px;
+      color: var(--danger);
+      min-height: 20px;
+      transition: opacity 0.2s;
+    }
+    .login-footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo">
+        <span class="login-logo-dot"></span>
+      </div>
+    </div>
+    <form class="login-form" id="loginForm" autocomplete="off">
+      <input
+        class="login-input"
+        id="passwordInput"
+        type="password"
+        placeholder="请输入访问密码"
+        autofocus
+        required
+      />
+      <button class="login-button" id="loginButton" type="submit">登 录</button>
+      <p class="login-error" id="loginError"></p>
+    </form>
+
+  </div>
+  <script>
+    const form = document.getElementById("loginForm");
+    const input = document.getElementById("passwordInput");
+    const button = document.getElementById("loginButton");
+    const error = document.getElementById("loginError");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const pw = input.value.trim();
+      if (!pw) return;
+      button.disabled = true;
+      button.textContent = "验证中…";
+      error.textContent = "";
+      try {
+        const res = await fetch("/api/login", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ password: pw }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          window.location.href = "/";
+        } else {
+          error.textContent = data.error || "密码错误";
+          input.select();
+        }
+      } catch {
+        error.textContent = "网络错误，请重试";
+      } finally {
+        button.disabled = false;
+        button.textContent = "登 录";
+      }
+    });
+  </script>
+</body>
+</html>

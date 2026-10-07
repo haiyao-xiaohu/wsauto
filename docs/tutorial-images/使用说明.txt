@@ -1,0 +1,9 @@
+教程配图使用说明
+
+01-cover.png：文章封面
+02-workflow.png：放在“一、先理解运行流程”后
+03-quicknode-setup.png：放在 QuickNode 节点与 Streams 配置章节
+04-checklist.png：放在实盘测试与隐私检查章节
+
+QuickNode 配置图为示意图，不是实际控制台截图。
+所有图片 1536×1024；不含真实密钥、IP 或钱包名单。

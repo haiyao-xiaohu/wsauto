@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.env
+*.log
+logs/
+.DS_Store
+!.env.example
+public/howler.min.js
+test/blacklist.txt
+
+# Local credentials, runtime artifacts and personal wallet lists
+.env.*
+!.env.example
+dist-frontend/
+.idea/
+*.pem
+*.key
+test/wallets.json
+test/1.t x t
+test/wall.txt
+test/webhook-wallets.txt
+test/wallet-book-bsc-active.json
